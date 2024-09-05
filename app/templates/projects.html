@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Projects - My Portfolio{% endblock %}
+
+{% block content %}
+    <h1 class="text-4xl font-bold mb-8">My Projects</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for project in projects.items %}
+            <article id="project-{{ project.id }}" class="bg-white rounded-lg shadow-md overflow-hidden">
+                {% if project.image_url %}
+                    <img src="{{ project.image_url }}" alt="{{ project.title }}" class="w-full h-48 object-cover">
+                {% endif %}
+                <div class="p-6">
+                    <h2 class="text-xl font-semibold mb-2">{{ project.title }}</h2>
+                    <p class="mb-4">{{ project.description }}</p>
+                    {% if project.project_url %}
+                        <a href="{{ project.project_url }}" target="_blank" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">View Project</a>
+                    {% endif %}
+                    <p class="text-sm text-gray-600 mt-2">Created: {{ project.created_at.strftime('%B %d, %Y') }}</p>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+
+    <nav aria-label="Project pagination" class="mt-8 flex justify-center items-center">
+        {% if projects.has_prev %}
+            <a href="{{ url_for('projects', page=projects.prev_num) }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">Previous</a>
+        {% endif %}
+        <span class="text-gray-600">Page {{ projects.page }} of {{ projects.pages }}</span>
+        {% if projects.has_next %}
+            <a href="{{ url_for('projects', page=projects.next_num) }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ml-2">Next</a>
+        {% endif %}
+    </nav>
+{% endblock %}
